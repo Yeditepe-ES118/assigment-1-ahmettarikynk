@@ -1,29 +1,30 @@
 import numpy as np
 
-positions = np.loadtxt("positions.txt", delimiter=",") # m
-velocities = np.loadtxt("velocities.txt", delimiter=",") # m
-masses = np.loadtxt("masses.txt", delimiter=",") # kg
+masses = np.loadtxt("masses.txt")
+positions = np.loadtxt("positions.txt", delimiter=",")
+velocities = np.loadtxt("velocities.txt", delimiter=",")
 
+positions_old = np.copy(positions)
 
-g = np.array([0, -9.81]) # kg/m-s2
+dt = 0.01
+g = np.array([0, -9.81])
+a = g
 
-# time increment between the consecutive time steps
-dt = 0.01 # s
-
-old_positions = np.copy(positions)
-
-# simulate forces, velocities, and positions for 100 time steps
 for step in range(100):
-    # calculate force (just gravity in this simple case)
-    forces = np.array([[g[0] * masses, g[1] * masses]]) # N
+    velocities = velocities + a * dt
+    positions = positions + velocities * dt
 
-    # update velocities using dv = g*dt
-    velocities += g * dt # m/s
-
-    # update positions
-    positions += velocities * dt # m
+positions_new = np.copy(positions)
 
 
-new_positions = positions
+max_disp = np.max(np.abs(positions_new[:, 1] - positions_old[:, 1]))
+max_min = np.min(np.abs(positions_new[:, 1] - positions_old[:, 1]))
+avg_disp = np.mean(np.abs(positions_new[:, 1] - positions_old[:, 1]))
 
-np.savetxt("new_positions.txt", new_positions, delimiter=",")
+
+print(f"Max displacement: {max_disp}")
+print(f"Min displacement: {max_min}")
+print(f"Average displacement: {avg_disp}")
+
+
+np.savetxt("positions_new.txt", positions_new, delimiter=",")
