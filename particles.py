@@ -22,9 +22,4 @@ max_min = np.min(np.abs(positions_new[:, 1] - positions_old[:, 1]))
 avg_disp = np.mean(np.abs(positions_new[:, 1] - positions_old[:, 1]))
 
 
-print(f"Max displacement: {max_disp}")
-print(f"Min displacement: {max_min}")
-print(f"Average displacement: {avg_disp}")
-
-
 np.savetxt("positions_new.txt", positions_new, delimiter=",")
